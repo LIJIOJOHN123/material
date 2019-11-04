@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Fragment, useEffect } from 'react';
+import Routers from './Router'
+import { Provider } from 'react-redux'
+import { init } from './reducers'
+import { loadUser } from './actions'
+import setToken from './utils/setAuth'
 
-function App() {
+if (localStorage.token) {
+  setToken(localStorage.token)
+}
+const App = () => {
+  const store = init()
+  useEffect(() => {
+    store.dispatch(loadUser())
+  }, [])
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    <Provider store={store}>
+      <Fragment>
+        <Routers />
+      </Fragment>
+    </Provider>
+  )
 }
 
 export default App;
